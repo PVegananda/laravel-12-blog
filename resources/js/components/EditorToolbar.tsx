@@ -1,52 +1,134 @@
-import type { Editor } from "@tiptap/react";
+import { Editor } from "@tiptap/react";
 
-export default function EditorToolbar({ editor }: { editor: Editor | null }) {
+interface Props {
+  editor: Editor | null;
+}
+
+export default function EditorToolbar({ editor }: Props) {
   if (!editor) return null;
 
-  const btn =
-    "px-3 py-1 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 text-sm font-medium transition";
-  const active =
-    "px-3 py-1 rounded-lg bg-[#0A1A2F] text-white text-sm font-medium transition";
-
   return (
-    <div className="flex flex-wrap gap-2 p-3 bg-white border border-gray-300 rounded-t-xl">
-      <button className={editor.isActive("bold") ? active : btn} onClick={() => editor.chain().focus().toggleBold().run()}>Bold</button>
-      <button className={editor.isActive("italic") ? active : btn} onClick={() => editor.chain().focus().toggleItalic().run()}>Italic</button>
-      <button className={editor.isActive("underline") ? active : btn} onClick={() => editor.chain().focus().toggleUnderline().run()}>Underline</button>
+    <div className="border border-gray-300 rounded-t-xl bg-gray-100 p-2 flex flex-wrap gap-2">
 
-      <button className={editor.isActive("heading", { level: 1 }) ? active : btn} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}>H1</button>
-      <button className={editor.isActive("heading", { level: 2 }) ? active : btn} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>H2</button>
-      <button className={editor.isActive("heading", { level: 3 }) ? active : btn} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>H3</button>
+      {/* Bold */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className="px-2 py-1 border rounded"
+      >
+        B
+      </button>
 
-      <button className={editor.isActive("bulletList") ? active : btn} onClick={() => editor.chain().focus().toggleBulletList().run()}>• List</button>
-      <button className={editor.isActive("orderedList") ? active : btn} onClick={() => editor.chain().focus().toggleOrderedList().run()}>1. List</button>
+      {/* Italic */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className="px-2 py-1 border rounded"
+      >
+        I
+      </button>
 
-      <button className={btn} onClick={() => editor.chain().focus().setTextAlign("left").run()}>Left</button>
-      <button className={btn} onClick={() => editor.chain().focus().setTextAlign("center").run()}>Center</button>
-      <button className={btn} onClick={() => editor.chain().focus().setTextAlign("right").run()}>Right</button>
+      {/* Underline */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className="px-2 py-1 border rounded"
+      >
+        U
+      </button>
+
+      {/* H1 - H3 */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        className="px-2 py-1 border rounded"
+      >
+        H1
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className="px-2 py-1 border rounded"
+      >
+        H2
+      </button>
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className="px-2 py-1 border rounded"
+      >
+        H3
+      </button>
+
+      {/* Lists */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleBulletList().run()}
+        className="px-2 py-1 border rounded"
+      >
+        • List
+      </button>
 
       <button
-        className={btn}
+        type="button"
+        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        className="px-2 py-1 border rounded"
+      >
+        1. List
+      </button>
+
+      {/* Code block */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        className="px-2 py-1 border rounded"
+      >
+        {"</>"}
+      </button>
+
+      {/* Alignment */}
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+        className="px-2 py-1 border rounded"
+      >
+        Left
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+        className="px-2 py-1 border rounded"
+      >
+        Center
+      </button>
+      <button
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+        className="px-2 py-1 border rounded"
+      >
+        Right
+      </button>
+
+      {/* Link */}
+      <button
+        type="button"
         onClick={() => {
           const url = prompt("Masukkan URL:");
           if (url) editor.chain().focus().setLink({ href: url }).run();
         }}
+        className="px-2 py-1 border rounded"
       >
         Link
       </button>
 
+      {/* Image */}
       <button
-        className={btn}
+        type="button"
         onClick={() => {
-          const url = prompt("URL gambar:");
+          const url = prompt("Masukkan URL Gambar:");
           if (url) editor.chain().focus().setImage({ src: url }).run();
         }}
+        className="px-2 py-1 border rounded"
       >
-        Image
+        🖼️
       </button>
-
-      <button className={btn} onClick={() => editor.chain().focus().undo().run()}>Undo</button>
-      <button className={btn} onClick={() => editor.chain().focus().redo().run()}>Redo</button>
     </div>
   );
 }

@@ -23,33 +23,36 @@ class HandleInertiaRequests extends Middleware
      *
      * @see https://inertiajs.com/asset-versioning
      */
-    public function version(Request $request): ?string
-    {
-        return parent::version($request);
-    }
-
-    /**
-     * Define the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     *
-     * @return array<string, mixed>
-     */
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
         return [
             ...parent::share($request),
+
+            // 🔥 FLASH MESSAGE (PENTING untuk TOAST)
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error'   => $request->session()->get('error'),
+            ],
+
+            // Existing props (biarkan tetap ada)
             'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
+
+            'quote' => [
+                'message' => trim($message),
+                'author'  => trim($author),
+            ],
+
             'auth' => [
                 'user' => $request->user(),
             ],
+
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
         ];
     }
+
 }

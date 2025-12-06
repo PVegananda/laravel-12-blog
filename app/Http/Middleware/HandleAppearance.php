@@ -20,4 +20,6 @@ class HandleAppearance
 
         return $next($request);
     }
+    
+    
 }
