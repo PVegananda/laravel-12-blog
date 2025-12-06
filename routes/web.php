@@ -11,23 +11,55 @@ use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\TagAdminController;
 use App\Http\Controllers\Api\PostController;
 
-// =============================
-// PUBLIC HOMEPAGE
-// =============================
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
+use App\Http\Controllers\Front\PageController;
+use App\Http\Controllers\Front\PostFrontController;
 
-// =============================
-// ADMIN LOGIN PAGE
-// =============================
+/*
+|--------------------------------------------------------------------------
+| PUBLIC FRONTEND
+|--------------------------------------------------------------------------
+*/
+
+// Homepage
+Route::get('/', function () {
+    return Inertia::render('Home', [
+        'posts' => \App\Models\Post::orderBy('created_at', 'desc')
+            ->take(6)
+            ->get()
+            ->map(fn($p) => [
+                'id' => $p->id,
+                'title' => $p->title,
+                'slug' => $p->slug,
+                'thumbnail_url' => $p->thumbnail 
+                    ? asset('storage/' . $p->thumbnail)
+                    : null,
+                'created_at' => $p->created_at,
+            ]),
+    ]);
+})->name('home');
+
+// About page
+Route::get('/about', [PageController::class, 'about'])->name('about');
+
+// All posts (list)
+Route::get('/posts', [PostFrontController::class, 'index'])->name('posts.index');
+
+// Single post detail
+Route::get('/posts/{slug}', [PostFrontController::class, 'show'])->name('posts.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN LOGIN & REDIRECT
+|--------------------------------------------------------------------------
+*/
+
+// Login page
 Route::get('/admin/login', function () {
     return Inertia::render('Admin/Login');
 })->name('admin.login');
 
-// =============================
-// AUTO REDIRECT /admin
-// =============================
+// Auto redirect /admin
 Route::get('/admin', function () {
     if (Auth::check() && Auth::user()->is_admin) {
         return redirect()->route('admin.dashboard');
@@ -35,9 +67,13 @@ Route::get('/admin', function () {
     return redirect()->route('admin.login');
 })->name('admin.redirect');
 
-// =============================
-// ADMIN PROTECTED ROUTES
-// =============================
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN PROTECTED ROUTES
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->as('admin.')
@@ -57,9 +93,18 @@ Route::middleware(['auth', 'isAdmin'])
         Route::resource('tags', TagAdminController::class);
     });
 
-// PUBLIC API POSTS
-Route::get('/posts', [PostController::class, 'index']);
-Route::post('/posts', [PostController::class, 'store']);
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC API (Frontend)
+|--------------------------------------------------------------------------
+*/
+
+// Route::prefix('api')->group(function () {
+//     Route::get('/posts', [PostController::class, 'index']);
+//     Route::post('/posts', [PostController::class, 'store']);
+// });
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

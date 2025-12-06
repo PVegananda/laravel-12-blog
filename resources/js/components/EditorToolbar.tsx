@@ -87,7 +87,7 @@ export default function EditorToolbar({ editor }: Props) {
       </button>
 
       {/* Alignment */}
-      <button
+      {/* <button
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         className="px-2 py-1 border rounded"
       >
@@ -104,7 +104,7 @@ export default function EditorToolbar({ editor }: Props) {
         className="px-2 py-1 border rounded"
       >
         Right
-      </button>
+      </button> */}
 
       {/* Link */}
       <button

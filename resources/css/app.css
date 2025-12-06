@@ -173,4 +173,44 @@
   scroll-behavior: auto !important;
 }
 
+/* Styling untuk konten artikel */
+.article-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 1.4rem;
+    margin-bottom: 0.8rem;
+}
+
+.article-content h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-top: 1.2rem;
+    margin-bottom: 0.6rem;
+}
+
+.article-content p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.article-content ul {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+    list-style: disc;
+}
+
+.article-content ol {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+    list-style: decimal;
+}
+
+.article-content img {
+    margin: 1.5rem auto;
+    display: block;
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+
 
